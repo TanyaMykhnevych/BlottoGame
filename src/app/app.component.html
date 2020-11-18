@@ -32,8 +32,8 @@
   <button type="button" class="btn btn-dark mb-5 mr-3" mat-raised-button (click)="calculate()">Calculate</button>
   <button type="button" class="btn btn-warning mb-5" mat-raised-button (click)="reset()">Reset</button>
   <div class="row" *ngIf="isCalculated">
-    <div class="col-md-1">
-      <select [(ngModel)]="selectedStrategyIndex" style="width: 80px;">
+    <div class="col-lg-2">
+      <select class="form-control" [(ngModel)]="selectedStrategyIndex">
         <option *ngFor="let strategy of firstPlayerStrategies" [value]="strategy.key">{{strategy.value}}</option>
       </select>
     </div>
