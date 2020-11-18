@@ -1,3 +1,4 @@
+import { KeyValue } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { NumberComposer } from './number-composer';
 
@@ -13,12 +14,18 @@ export class AppComponent {
   public isCalculated = false;
   public table: string[][] = [];
   public optimalStrategies: string[] = [];
+  public firstPlayerStrategies: KeyValue<number, string>[] = [];
+  public selectedStrategyIndex = 0;
+
+  public secondPlayerStrategy: string;
+  public firstPlayerWin: string;
 
   public calculate(): void {
     this.isCalculated = true;
     const firstCompositions = this._getNumberCompositions(this.firstRegiments, this.positions);
     const secondCompositions = this._getNumberCompositions(this.secondRegiments, this.positions);
     this._fillGameMatrix(firstCompositions, secondCompositions);
+    this.setFirstPlayerStrategies();
   }
 
   public reset(): void {
@@ -56,6 +63,13 @@ export class AppComponent {
     }
 
     this.optimalStrategies = optimalStrategies;
+  }
+
+  public makeMove(): void {
+    const secondStrategyIndex = this.getRandomSecondStrategyIndex();
+    this.secondPlayerStrategy = this.table[0][secondStrategyIndex + 1];
+
+    this.firstPlayerWin = this.table[this.selectedStrategyIndex][secondStrategyIndex + 1];
   }
 
   private _getNumberCompositions(n: number, length: number): number[][] {
@@ -98,5 +112,22 @@ export class AppComponent {
         this.table[i + 1][j + 1] = wins.toString();
       }
     }
+  }
+
+  private setFirstPlayerStrategies(): void {
+    const result: KeyValue<number, string>[] = [];
+
+    for (let i = 1; i < this.table.length; i++) {
+      result.push({ key: i, value: this.table[i][0] });
+    }
+
+    this.firstPlayerStrategies = result;
+  }
+
+  private getRandomSecondStrategyIndex(): number {
+    const min = 0;
+    const max = this.table[0].length - 1;
+
+    return (Math.random() * (max - min) + min) | 0;
   }
 }
